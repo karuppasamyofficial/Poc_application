@@ -26,6 +26,7 @@ const Email = sequelize.define('email',
 
 )
 // const email="kdjk";
+// Email.belongsTo(User);
 User.hasMany(Email);
 
 // Email.sync({force:true})
