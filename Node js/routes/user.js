@@ -4,7 +4,7 @@ const PhoneNumber = require("../models/phone_number.js");
 const Address = require("../models/address.js");
 const Education = require("../models/education.js");
 
-const { authSchema } = require("../utils/validation/userSchema");
+const { authSchema, userSchema } = require("../utils/validation/userSchema");
 
 const Joi = require("joi");
 
@@ -26,16 +26,20 @@ const getUser = async (request, h) => {
         },
       ],
     });
-
-    return h.response({ data: userlist });
+console.log("result of userlist",userlist);
+    return h.response({ data: userlist }).code(200);
   } catch (error) {
     console.log("userlist", error);
-    //   return h.response({ status: "failure" }).code(500);
+    return h.response({ status: "Internal server error" }).code(500);
   }
 };
 
 const userRegistration = async (request, h) => {
   console.log("registerUser", request.payload);
+  const { error, value } = userSchema.validate(request.payload);
+  console.log("eroro in user creation", error);
+
+  if (error) return h.response(JSON.stringify(error.message)).code(422);
 
   const {
     first_name,
@@ -98,9 +102,9 @@ const userRegistration = async (request, h) => {
     const educationInfo = await Education.bulkCreate(educationDetails);
     const addressInfo = await Address.bulkCreate(listofAddress);
 
-    return h.response(userCreation);
+    return h.response(userCreation).code(201);
   } catch (error) {
-    return h.response({ status: "failure" }).code(500);
+    return h.response({ status: "Internal server error" }).code(500);
   }
 };
 

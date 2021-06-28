@@ -7,6 +7,12 @@ const init = async () => {
   const server = Hapi.server({
     port: 3000,
     host: "localhost",
+    routes: {
+      cors: {
+          origin: ['*'], // an array of origins or 'ignore'    
+          credentials: true // boolean - 'Access-Control-Allow-Credentials'
+      }
+  }
   });
 
   try {
@@ -15,7 +21,14 @@ const init = async () => {
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
-  server.route(routes);
+
+
+  var PREFIX = '/v1';
+  
+
+  var prefixize = function (route) {  route.path = PREFIX + route.path;return route; }
+  server.route(routes.map(prefixize));
+  // server.route(routes);
 
   await server.start();
   console.log("Server running on %s", server.info.uri);

@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.registrationHeader{
+  color: #2196F3;
+    margin-bottom: 10px;
+    font-size: large;
+}
+
+.form {
+  max-width: 330px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.or{
+
+  text-align: center;
+}
+
+.logo{
+
+  width: 202px;
+  /* margin: auto; */
+  /* margin: 0 auto; */
+  margin-left: 63px;
+  margin-bottom: 31px;
+}
+.signup{
+color: #2196F3;
+  float: right;
+  text-decoration: none;
+}
+.loginbtn{
+  width: 328px;
+  height: 50px;
+  margin-top: 24px;
+  background-color: #2196F3;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  /* margin: 4px 2px; */
+  cursor: pointer;
+  border-radius: 6px;
+}
