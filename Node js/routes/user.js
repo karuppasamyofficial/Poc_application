@@ -27,6 +27,9 @@ const getUser = async (request, h) => {
       ],
     });
 console.log("result of userlist",userlist);
+// res.header("Access-Control-Allow-Origin", "*");
+// return h.response({ data: userlist }).code(200).header("Access-Control-Allow-Credentials", true);
+
     return h.response({ data: userlist }).code(200);
   } catch (error) {
     console.log("userlist", error);
@@ -109,6 +112,8 @@ const userRegistration = async (request, h) => {
 };
 
 module.exports = [
-  { method: "POST", path: "/login", handler: getUser },
+  { method: "POST", path: "/login", options:{
+    
+  },handler: getUser },
   { method: "POST", path: "/users", handler: userRegistration },
 ];

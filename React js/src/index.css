@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: #eff0f1;
 }
 
 code {
@@ -17,6 +19,31 @@ code {
     font-size: large;
 }
 
+.errormessagecolor{
+
+  color: red;
+}
+
+.removeIcon{
+  font-size: 33px;
+  color: red;
+}
+.addIcon{
+  font-size: 30px;
+  color: #2196F3;
+}
+
+.registrationTitle{
+  font-size: 30px;
+    text-align: center;
+    color: white;
+    background-color: #40549c;
+    padding: 9px;
+}
+.mbot-5{
+
+  margin-bottom: 5px;
+}
 .form {
   max-width: 330px;
   margin: 0 auto;
@@ -24,9 +51,20 @@ code {
   flex-direction: column;
   background: white;
   padding: 20px;
-  margin-top: 30px;
+  margin-top: 140px;
+}
+.itemContainer{
+  margin-bottom: 10px !important;
+}
+.headercontainer{
+  margin-bottom: 15px;
 }
 
+.registrationContainer{
+  margin: auto;
+    width: 70%;
+    background-color: white;
+}
 .or{
 
   text-align: center;
@@ -44,6 +82,7 @@ code {
 color: #2196F3;
   float: right;
   text-decoration: none;
+  margin-top: 30px;
 }
 .loginbtn{
   width: 328px;

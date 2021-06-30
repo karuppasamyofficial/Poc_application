@@ -9,10 +9,9 @@ const init = async () => {
     host: "localhost",
     routes: {
       cors: {
-          origin: ['*'], // an array of origins or 'ignore'    
-          credentials: true // boolean - 'Access-Control-Allow-Credentials'
-      }
-  }
+        origin: ["*"],
+      },
+    },
   });
 
   try {
@@ -22,12 +21,13 @@ const init = async () => {
     console.error("Unable to connect to the database:", error);
   }
 
+  var version = "/v1";
 
-  var PREFIX = '/v1';
-  
-
-  var prefixize = function (route) {  route.path = PREFIX + route.path;return route; }
-  server.route(routes.map(prefixize));
+  var addVersion = function (route) {
+    route.path = version + route.path;
+    return route;
+  };
+  server.route(routes.map(addVersion));
   // server.route(routes);
 
   await server.start();

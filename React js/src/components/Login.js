@@ -10,10 +10,15 @@ import Button from "@material-ui/core/Button";
 import logo from "../images/logo-stackoverflow.png";
 import axiosInstance from "../axios";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
+import history from "../history";
+
 class Login extends Component {
   state = {
     email_id: "",
     phone_no: "",
+    alert: false,
+    errorMessage: null,
   };
 
   handleChange = (e) => {
@@ -22,7 +27,6 @@ class Login extends Component {
 
   onClickLogin = (e) => {
     e.preventDefault();
-    console.log("onClickLogin", this.state);
 
     axiosInstance
       .post("/login", {
@@ -30,9 +34,17 @@ class Login extends Component {
       })
       .then(function (response) {
         console.log("response", response.data);
+        if (response.data.length === 0) {
+          console.log("server error");
+          this.setState({ alert: true, errorMessage: "Username is incorrect" });
+          history.push("./");
+        } else {
+          history.push("./DashBoard");
+        }
       })
       .catch((err) => {
         console.log("login error", err);
+        this.setState({ alert: true, errorMessage: "Internal server error" });
       });
   };
   render() {
@@ -46,7 +58,6 @@ class Login extends Component {
           <div>
             <TextField
               value={this.state.email_id}
-              
               fullWidth
               label="Email *"
               variant="outlined"
@@ -70,31 +81,18 @@ class Login extends Component {
           <button className="loginbtn" onClick={this.onClickLogin}>
             Login
           </button>
-          {/* <Grid container>
-              
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid> */}
+          {this.state.alert == true ? (
+            <Alert variant="filled" severity="error">
+              {this.state.errorMessage}
+            </Alert>
+          ) : null}
+
           <div className="signup">
             <Link className="signup" signup>
               {"Don't have an account? Sign Up"}
             </Link>
           </div>
         </form>
-        {/* <Grid container spacing={3}>
-         <Grid item md={12}>
-       nskdjnandnoif
-        </Grid>
-        <Grid item >
-       nskdjnandnoif
-        </Grid>
-        <Grid item >
-       nskdjnandnoif
-        </Grid>
-             </Grid> */}
       </div>
     );
   }
