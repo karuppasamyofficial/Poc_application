@@ -27,7 +27,7 @@ const userSchema = Joi.object({
   education: Joi.array()
     .items({
       education_type: Joi.string().required(),
-      institution_nmae: Joi.string().required(),
+      institution_name: Joi.string().required(),
       university: Joi.string().required(),
     })
     .min(1)

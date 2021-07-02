@@ -1,8 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../utils/database");
 const User = require("../models/user");
-const Email = sequelize.define(
-  "email",
+const Question = require("../models/question");
+const SkillSetMapping = sequelize.define(
+  "skill_set_mapping",
   {
     id: {
       type: Sequelize.INTEGER,
@@ -11,7 +12,7 @@ const Email = sequelize.define(
       allowNull: false,
     },
 
-    email_id: {
+    skill_id: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -20,6 +21,6 @@ const Email = sequelize.define(
     timestamps: false,
   }
 );
-User.hasMany(Email);
-Email.sync();
-module.exports = Email;
+Question.hasMany(SkillSetMapping);
+SkillSetMapping.sync();
+module.exports = SkillSetMapping;

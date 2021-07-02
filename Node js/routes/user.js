@@ -3,6 +3,7 @@ const Email = require("../models/email.js");
 const PhoneNumber = require("../models/phone_number.js");
 const Address = require("../models/address.js");
 const Education = require("../models/education.js");
+const sequelize = require("../utils/database");
 
 const { authSchema, userSchema } = require("../utils/validation/userSchema");
 
@@ -37,6 +38,8 @@ console.log("result of userlist",userlist);
   }
 };
 
+
+
 const userRegistration = async (request, h) => {
   console.log("registerUser", request.payload);
   const { error, value } = userSchema.validate(request.payload);
@@ -59,6 +62,9 @@ const userRegistration = async (request, h) => {
   var listofPhoneNo = [];
   var educationDetails = [];
   try {
+
+    const result = await sequelize.transaction(async (t) => {
+
     const userCreation = await User.create({
       first_name: first_name,
       last_name: last_name,
@@ -81,7 +87,7 @@ const userRegistration = async (request, h) => {
     education.map((e, i) => {
       educationDetails.push({
         education_type: e.education_type,
-        institution_nmae: e.institution_nmae,
+        institution_name: e.institution_name,
         university: e.university,
         userId: userCreation.id,
       });
@@ -100,20 +106,27 @@ const userRegistration = async (request, h) => {
       });
     });
     console.log("listofEmails", listofEmails);
-    const emailsInfo = await Email.bulkCreate(listofEmails);
-    const phoneNoInfo = await PhoneNumber.bulkCreate(listofPhoneNo);
-    const educationInfo = await Education.bulkCreate(educationDetails);
-    const addressInfo = await Address.bulkCreate(listofAddress);
-
-    return h.response(userCreation).code(201);
+    const emailsInfo = await Email.bulkCreate(listofEmails,{
+      transaction: t,
+    });
+    const phoneNoInfo = await PhoneNumber.bulkCreate(listofPhoneNo,{
+      transaction: t,
+    });
+    const educationInfo = await Education.bulkCreate(educationDetails,{
+      transaction: t,
+    });
+    const addressInfo = await Address.bulkCreate(listofAddress,{
+      transaction: t,
+    });
+    return userCreation
+  })
+    return h.response(result).code(201);
   } catch (error) {
     return h.response({ status: "Internal server error" }).code(500);
   }
 };
 
 module.exports = [
-  { method: "POST", path: "/login", options:{
-    
-  },handler: getUser },
+  { method: "POST", path: "/login",handler: getUser },
   { method: "POST", path: "/users", handler: userRegistration },
 ];

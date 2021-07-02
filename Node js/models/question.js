@@ -2,8 +2,10 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../utils/database");
 
 const User = require("../models/user");
-const Education = sequelize.define(
-  "education",
+const SkillSetMapping = require("../models/skillSetMapping");
+
+const Question = sequelize.define(
+  "question",
   {
     id: {
       type: Sequelize.INTEGER,
@@ -12,29 +14,30 @@ const Education = sequelize.define(
       allowNull: false,
     },
 
-    education_type: {
+    question_title: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    institution_name: {
+    question_description: {
       type: Sequelize.STRING,
+      allowNull: false,
+    },
+    up_vote: {
+      type: Sequelize.INTEGER,
       allowNull: true,
     },
-    university: {
-      type: Sequelize.STRING,
+    down_vote: {
+      type: Sequelize.INTEGER,
       allowNull: true,
     },
    
+    
    
   },
   {
     timestamps: false,
+
   }
 );
-User.hasMany(Education);
-Education.sync()
-
-
-
-
-module.exports = Education;
+Question.sync({alter:true});
+module.exports = Question;

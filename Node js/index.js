@@ -3,6 +3,9 @@ const sequelize = require("./utils/database");
 
 const routes = require("./routes");
 
+// const skill =require("./models/skill");
+
+
 const init = async () => {
   const server = Hapi.server({
     port: 3000,

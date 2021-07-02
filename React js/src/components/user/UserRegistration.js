@@ -1,17 +1,16 @@
 import React, { Component, Fragment } from "react";
 import Grid from "@material-ui/core/Grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
-
 import { Field, reduxForm, FieldArray } from "redux-form";
-
 import { renderTextField, renderDateField } from "../../utils/InputComponents";
 import UserFormValidation from "../../validation/UserFormValidation";
+import history from "../../history";
+import axiosInstance from "../../axios";
+import Alert from "@material-ui/lab/Alert";
 
 const renderPhoneNumbers = ({
   fields,
@@ -36,6 +35,7 @@ const renderPhoneNumbers = ({
             // type="text"
             component={renderTextField}
             label="Phone Number"
+            placeholder="Phone Number"
             inputProps={{ maxLength: 10 }}
           />
         </Grid>
@@ -135,9 +135,10 @@ const renderEmails = ({ fields, meta: { touched, error, submitFailed } }) => (
         <Grid item md={6} className="itemContainer">
           <Field
             name={`${inputField}.email_id`}
-            // type="text"
+           
             component={renderTextField}
-            label="Phone Number"
+          
+            placeholder="Email Id"
             type="email"
           />
         </Grid>
@@ -174,8 +175,87 @@ const renderRadioGroup = ({ meta, input, ...rest }) => (
   </>
 );
 class UserRegistration extends Component {
+
+
+  state={
+    errorMessage: null,
+  }
   onSubmitUserForm = (formvalues) => {
     console.log("onSubmitUserForm", formvalues);
+
+    const {
+      OfficeAddtessLine1,
+      OfficeAddtessLine2,
+      OfficeAddtessLine3,
+      OfficeCity,
+      OfficeLandmark,
+      OfficeState,
+      Officepincode,
+      ResidentialAddtessLine1,
+      ResidentialAddtessLine2,
+      ResidentialAddtessLine3,
+      ResidentialLandmark,
+      ResidentialState,
+      ResidentialCity,
+      Residentialpincode,
+      first_name,
+      last_name,
+      dob,
+      gender,
+      email,
+      phone_number,
+      education,
+    } = formvalues;
+    axiosInstance
+      .post("/users", {
+        
+
+
+        first_name:first_name,
+        last_name,last_name,
+        dob:dob,
+        gender:gender,
+        address:[{
+
+
+          "address_type":"office",
+          "address_line1":ResidentialAddtessLine1,
+          "address_line2":ResidentialAddtessLine2,
+          "address_line3":ResidentialAddtessLine3,
+          "landmark":ResidentialLandmark,
+          "state":ResidentialState,
+          "city":ResidentialCity,
+          "pincode":Residentialpincode
+        },
+      
+      
+        {
+
+
+          "address_type":"Residential",
+          "address_line1":OfficeAddtessLine1,
+          "address_line2":OfficeAddtessLine2,
+          "address_line3":OfficeAddtessLine3,
+          "landmark":OfficeLandmark,
+          "state":OfficeState,
+          "city":OfficeCity,
+          "pincode":Officepincode
+        }],
+        email:email,phone_number:phone_number,education:education
+
+
+
+
+      })
+      .then(function (response) {
+        console.log("response", response.data);
+        history.push('./Dashboard');
+      
+      })
+      .catch((err) => {
+        console.log("login error", err);
+        this.setState({ alert: true, errorMessage: "Internal server error" });
+      });
   };
 
   render() {
@@ -277,6 +357,14 @@ class UserRegistration extends Component {
               </Grid>
               <Grid item md={3} className="itemContainer">
                 <Field
+                  name="OfficeState"
+                  component={renderTextField}
+                  placeholder="State"
+                  label="State"
+                />
+              </Grid>
+              <Grid item md={3} className="itemContainer">
+                <Field
                   name="OfficeCity"
                   component={renderTextField}
                   placeholder="City"
@@ -328,6 +416,14 @@ class UserRegistration extends Component {
               </Grid>
               <Grid item md={3} className="itemContainer">
                 <Field
+                  name="ResidentialState"
+                  component={renderTextField}
+                  placeholder="State"
+                  label="State"
+                />
+              </Grid>
+              <Grid item md={3} className="itemContainer">
+                <Field
                   name="ResidentialCity"
                   component={renderTextField}
                   placeholder="City"
@@ -346,10 +442,19 @@ class UserRegistration extends Component {
 
             <div className="registrationHeader">Add Education Details</div>
             <FieldArray name="education" component={renderEducation} />
+            {this.state.alert == true ? (
+            <Alert variant="filled" severity="error">
+              {this.state.errorMessage}
+            </Alert>
+          ) : null}
             <Grid container>
+
+              <Grid  item  style={{marginBottom:"20px"}} >
               <button type="submit" className="loginbtn">
                 Login
-              </button>
+              </button> 
+                </Grid>
+              
             </Grid>
             {/* </div> */}
           </form>
