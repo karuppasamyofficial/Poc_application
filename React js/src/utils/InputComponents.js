@@ -1,6 +1,8 @@
 import TextField from "@material-ui/core/TextField";
+import Select from 'react-select';
 
-
+import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 export const renderTextField = (formProps) => {
     const {
       input,
@@ -17,6 +19,8 @@ export const renderTextField = (formProps) => {
           type={formProps.type}
           error={meta.touched && meta.error ? true : false}
           placeholder={formProps.placeholder}
+          fullWidth={formProps.fullWidth}
+          // fullWidth
           // label={formProps.label}
           name={formProps.name}
         //   disabled={formProps.disabled}
@@ -32,8 +36,8 @@ export const renderTextField = (formProps) => {
       </>
     );
   };
-
-
+ 
+  
   export const renderDateField = (formProps) => {
     const {
       input,

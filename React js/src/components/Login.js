@@ -27,25 +27,34 @@ class Login extends Component {
 
   onClickLogin = (e) => {
     e.preventDefault();
-
-    axiosInstance
-      .post("/login", {
-        email_id: this.state.email_id,
-      })
-      .then(function (response) {
-        console.log("response", response.data);
-        if (response.data.length === 0) {
-          console.log("server error");
-          this.setState({ alert: true, errorMessage: "Username is incorrect" });
-          history.push("./");
-        } else {
-          history.push("./DashBoard");
-        }
-      })
-      .catch((err) => {
-        console.log("login error", err);
-        this.setState({ alert: true, errorMessage: "Internal server error" });
+    if (this.state.email_id != "" || this.state.phone_no != "") {
+      axiosInstance
+        .post("/login", {
+          email_id: this.state.email_id,
+        })
+        .then((response) => {
+          console.log("response", response.data);
+          if (response.data.length === 0) {
+            console.log("server error");
+            this.setState({
+              alert: true,
+              errorMessage: "Username is incorrect",
+            });
+            history.push("./");
+          } else {
+            history.push("./DashBoard");
+          }
+        })
+        .catch((err) => {
+          console.log("login error", err);
+          this.setState({ alert: true, errorMessage: "Internal server error" });
+        });
+    } else {
+      this.setState({
+        alert: true,
+        errorMessage: "Please enter Email Id Or phone number",
       });
+    }
   };
   render() {
     return (
@@ -60,6 +69,7 @@ class Login extends Component {
               value={this.state.email_id}
               fullWidth
               label="Email *"
+              type="email"
               variant="outlined"
               onChange={(event) => {
                 this.setState({ email_id: event.target.value });
@@ -88,7 +98,7 @@ class Login extends Component {
           ) : null}
 
           <div className="signup">
-            <Link className="signup" signup>
+            <Link className="signup" to="./UserRegistration" signup>
               {"Don't have an account? Sign Up"}
             </Link>
           </div>

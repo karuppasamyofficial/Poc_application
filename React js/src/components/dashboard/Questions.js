@@ -1,23 +1,13 @@
 import React, { Component } from "react";
-import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-// import Link from "@material-ui/core/Link";
 import QuestionForm from "./QuestionForm";
-import { formValues } from "redux-form";
 import axiosInstance from "../../axios";
-import QuestionsView from "./QuestionsView";
-import Questions from "./Questions";
-import history from "../../history";
-import UserRegistration from "../user/UserRegistration";
-import { Router, Switch, Route, Link, withRouter } from "react-router-dom";
 
-class DashBoard extends Component {
+export default class Questions extends Component {
   state = {
     skillsOptions: [],
     skill_names: [],
     showForm: false,
   };
-
   componentDidMount() {
     axiosInstance
       .get("/skills")
@@ -72,28 +62,13 @@ class DashBoard extends Component {
       .catch((err) => {});
   };
   render() {
-    console.log("state values", this.state.skillsOption);
-
-    const { showForm, skillsOptions } = this.state;
     return (
-      <>
-        <>
-         
-        </>
-        <div>
-          <button onClick={() => history.push("/dashboard/questions/ask")}>
-            Ask Question
-          </button>
-          <button onClick={() => history.push("/dashboard/questions")}>
-            Questions
-          </button>
-
-          <Route path="/dashboard/questions" component={QuestionsView} />
-          <Route path="/dashboard/questions/ask" component={Questions} />
-        </div>
-      </>
+      <div>
+        <QuestionForm
+          submitQuestion={this.submitQuestion}
+          skillsOptions={this.state.skillsOptions}
+        ></QuestionForm>
+      </div>
     );
   }
 }
-
-export default DashBoard;

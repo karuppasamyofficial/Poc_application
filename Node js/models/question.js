@@ -22,14 +22,7 @@ const Question = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
-    up_vote: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
-    down_vote: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
+    
    
     
    

@@ -2,13 +2,16 @@ import {
   Router,
   Switch,
   Route,
-  Link
+  Link,
+
 } from "react-router-dom";
 
 import Login from "./components/Login";
 import UserRegistration from "./components/user/UserRegistration";
 import DashBoard from "./components/dashboard/DashBoard";
-
+import QuestionsView from "./components/dashboard/QuestionsView";
+import Questions from "./components/dashboard/Questions";
+// import DashBoard from "./components/dashboard/DashBoard";
 import history from './history';
 
 import { createStore, combineReducers } from 'redux';
@@ -24,15 +27,23 @@ function App() {
   return (
     <Provider  store={store}>
     <Router history={history}>
-    <div>
+   
       
       <Switch>
-          <Route exact path='/' component={Login} exact />
-          <Route path='/UserRegistration' component={UserRegistration} /> 
-          <Route path='/DashBoard' component={DashBoard} /> 
+            <Route exact path='/' component={Login}  />
+            <Route path='/userRegistration' component={UserRegistration} /> 
+            
+            <Route path='/dashboard'  component={DashBoard} />
+              {/* <IndexRoute component={AuthCheck(HomeContainer)} /> */}
+            {/* <Route path='/dashboard/questions'   component={Questions} />  
+            <Route path='/dashboard/questions/ask'   component={QuestionsView} />  */}
+               
+            
+              
+            
 
       </Switch>
-    </div>
+   
   </Router>
   </Provider>
   );
