@@ -1,7 +1,11 @@
 const Joi = require("joi");
 
-const authSchema = Joi.object({
+const emailvalidationschema = Joi.object({
   email_id: Joi.string().email().required(),
+});
+
+const phone_novalidationschema = Joi.object({
+  phone_no: Joi.string().max(10).required(),
 });
 
 const emailSchema = Joi.object({
@@ -48,6 +52,7 @@ const userSchema = Joi.object({
 });
 
 module.exports = {
-  authSchema,
+  emailvalidationschema,
+  phone_novalidationschema,
   userSchema,
 };

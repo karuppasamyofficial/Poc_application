@@ -13,6 +13,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.itemgrow{
+
+  flex: 4;
+}
+.topbar{
+  display: flex;
+  height: 58px;
+ 
+  justify-content: center;
+  align-items: center;
+  border-top: 4px solid #f48024;
+
+  shadow: 2px 2px 0px #888888;
+  box-shadow: 1px #888888;
+  box-shadow: 1px #888888;
+ 
+  /* z-index: 544px; */
+  box-shadow: 0px 0px 6px 1px #8888
+}
 .registrationHeader{
   color: #2196F3;
     margin-bottom: 10px;
@@ -73,6 +94,19 @@ code {
   text-align: center;
 }
 
+.dashboardlogo{
+  width: 139px;
+    height: 42px;
+    margin-left: 27px;
+}
+
+.username{
+
+  display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 123px;
+}
 .logo{
 
   width: 202px;

@@ -5,37 +5,67 @@ const Address = require("../models/address.js");
 const Education = require("../models/education.js");
 const sequelize = require("../utils/database");
 
-const { authSchema, userSchema } = require("../utils/validation/userSchema");
+const { emailvalidationschema, userSchema,phone_novalidationschema } = require("../utils/validation/userSchema");
 
 const Joi = require("joi");
 
 const getUser = async (request, h) => {
-  console.log("login request", request.headers);
+  console.log("login request---------------", request.payload);
 
-  const { email_id } = request.payload;
+  if(request.payload.phone_no){
+    console.log("phone block");
 
-  const { error, value } = authSchema.validate(request.payload);
 
-  if (error) return h.response(JSON.stringify(error.message)).code(422);
-  try {
-    const userlist = await User.findAll({
-      include: [
-        {
-          model: Email,
-          attributes: ["id", "email_id", "userId"],
-          where: { email_id: email_id },
-        },
-      ],
-    });
-console.log("result of userlist",userlist);
-// res.header("Access-Control-Allow-Origin", "*");
-// return h.response({ data: userlist }).code(200).header("Access-Control-Allow-Credentials", true);
+    const { phone_no } = request.payload;
 
-    return h.response({ data: userlist }).code(200);
-  } catch (error) {
-    console.log("userlist", error);
-    return h.response({ status: "Internal server error" }).code(500);
+    const { error, value } = phone_novalidationschema.validate(request.payload);
+  
+    if (error) return h.response(JSON.stringify(error.message)).code(422);
+
+    try {
+      const userlist = await User.findAll({
+        include: [
+          {
+            model: PhoneNumber,
+            attributes: ["id", "phone_no", "userId"],
+            where: { phone_no: phone_no },
+          },
+        ],
+      });
+  console.log("result of userlist",userlist);
+return h.response({ data: userlist }).code(200);
+    } catch (error) {
+      console.log("userlist", error);
+      return h.response({ status: "Internal server error" }).code(500);
+    }
   }
+
+  else{
+    console.log("email block");
+    const { email_id } = request.payload;
+
+    const { error, value } = emailvalidationschema.validate(request.payload);
+  
+    if (error) return h.response(JSON.stringify(error.message)).code(422);
+    try {
+      const userlist = await User.findAll({
+        include: [
+          {
+            model: Email,
+            attributes: ["id", "email_id", "userId"],
+            where: { email_id: email_id },
+          },
+        ],
+      });
+  console.log("result of userlist",userlist);
+return h.response({ data: userlist }).code(200);
+    } catch (error) {
+      console.log("userlist", error);
+      return h.response({ status: "Internal server error" }).code(500);
+    }
+  }
+
+  
 };
 
 

@@ -25,34 +25,59 @@ class Login extends Component {
     this.setState({ [e.currentTarget.id]: e.currentTarget.value });
   };
 
+  submitLogin = (payload) => {
+    axiosInstance
+      .post("/login", payload)
+      .then((response) => {
+        console.log("response", response.data);
+        console.log("username is incorrect", response.data.data.length);
+        if (response.data.data.length === 0) {
+          this.setState({
+            alert: true,
+            errorMessage: "Username is incorrect",
+          });
+        } else {
+          history.push("/DashBoard");
+        }
+      })
+      .catch((err) => {
+        console.log("login error", err);
+        this.setState({ alert: true, errorMessage: "something went wrong" });
+      });
+  };
+
   onClickLogin = (e) => {
     e.preventDefault();
     if (this.state.email_id != "" || this.state.phone_no != "") {
-      axiosInstance
-        .post("/login", {
-          email_id: this.state.email_id,
-        })
-        .then((response) => {
-          console.log("response", response.data);
-          if (response.data.length === 0) {
-            console.log("server error");
-            this.setState({
-              alert: true,
-              errorMessage: "Username is incorrect",
-            });
-            history.push("./");
-          } else {
-            history.push("./DashBoard");
-          }
-        })
-        .catch((err) => {
-          console.log("login error", err);
-          this.setState({ alert: true, errorMessage: "Internal server error" });
-        });
+      var payload;
+      if (this.state.email_id) {
+        if (
+          !new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(
+            this.state.email_id
+          )
+        ) {
+          this.setState({
+            alert: true,
+            errorMessage: "Please enter a valida email id",
+          });
+          console.log("email block");
+        } else {
+          payload = {
+            email_id: this.state.email_id,
+          };
+          this.submitLogin(payload);
+        }
+      } else {
+        console.log("phone number");
+        payload = {
+          phone_no: this.state.phone_no,
+        };
+        this.submitLogin(payload);
+      }
     } else {
       this.setState({
         alert: true,
-        errorMessage: "Please enter Email Id Or phone number",
+        errorMessage: "Please enter email Id or phone number",
       });
     }
   };
@@ -83,16 +108,25 @@ class Login extends Component {
               fullWidth
               label="Phone Number *"
               variant="outlined"
+              inputProps={{ maxLength: 10 }}
               onChange={(event) => {
                 this.setState({ phone_no: event.target.value });
               }}
             />
           </div>
-          <button className="loginbtn" onClick={this.onClickLogin}>
+          <button
+            className="loginbtn"
+            type="submit"
+            onClick={this.onClickLogin}
+          >
             Login
           </button>
           {this.state.alert == true ? (
-            <Alert variant="filled" severity="error">
+            <Alert
+              variant="filled"
+              style={{ marginTop: "11px" }}
+              severity="error"
+            >
               {this.state.errorMessage}
             </Alert>
           ) : null}
