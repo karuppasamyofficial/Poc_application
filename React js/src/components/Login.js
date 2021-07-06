@@ -29,7 +29,7 @@ class Login extends Component {
     axiosInstance
       .post("/login", payload)
       .then((response) => {
-        console.log("response", response.data);
+        console.log("response", response.data.data[0].first_name);
         console.log("username is incorrect", response.data.data.length);
         if (response.data.data.length === 0) {
           this.setState({
@@ -37,7 +37,8 @@ class Login extends Component {
             errorMessage: "Username is incorrect",
           });
         } else {
-          history.push("/DashBoard");
+          sessionStorage.setItem("userInfo",response.data.data[0].first_name)
+          history.push("/dashboard/questions");
         }
       })
       .catch((err) => {

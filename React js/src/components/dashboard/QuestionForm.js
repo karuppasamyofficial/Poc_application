@@ -7,7 +7,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { Field, reduxForm, FieldArray } from "redux-form";
 import { renderTextField } from "../../utils/InputComponents";
-import UserFormValidation from "../../validation/UserFormValidation";
+import PostQuestionValidation from "../../validation/PostQuestionValidation";
 import history from "../../history";
 import axiosInstance from "../../axios";
 import Alert from "@material-ui/lab/Alert";
@@ -18,10 +18,11 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 class QuestionForm extends Component {
   render() {
     const { handleSubmit, submitQuestion, skillsOptions } = this.props;
-
-    return (
+return (
       <>
-        <form onSubmit={handleSubmit(submitQuestion)}>
+ <form 
+        onSubmit={handleSubmit(submitQuestion)}
+        >
           <Grid container className="headercontainer">
             <Grid item md={8}  className="marbottom-10">
             <div className="mbot-5">
@@ -30,7 +31,7 @@ class QuestionForm extends Component {
               <Field
                 name="question_title"
                 component={renderTextField}
-                placeholder=" enter the title"
+                placeholder=" Enter the title"
                 // label="Last Name"
                 fullWidth
               />
@@ -52,34 +53,26 @@ class QuestionForm extends Component {
             <div className="mbot-5">
                   <label>Tag:</label>
                 </div>
-              {/* <Field name="skill_set" component={Autocomplete} options={options} /> */}
+         
               <Autocomplete
-                multiple
-                id="tags-filled"
-                options={skillsOptions.map((option) => option.label)}
-                // defaultValue={[top100Films[13].title]}
-                onChange={(event, value) => {
-                  this.props.change("skill_set", value);
-                }}
-                // freeSolo
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip
-                      variant="outlined"
-                      label={option}
-                      {...getTagProps({ index })}
-                    />
-                  ))
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    // label="freeSolo"
-                    placeholder="Ex:php"
-                  />
-                )}
-              />
+        multiple
+        id="tags-filled"
+        options={skillsOptions.map((option) => option.label)}
+       
+        onChange={(event, value) => {
+          // console.log("onchange value in auto complete",option);
+          this.props.change("skill_set", value);
+        }}
+        freeSolo
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+          ))
+        }
+        renderInput={(params) => (
+          <TextField {...params} variant="outlined"  placeholder="Ex. php" />
+        )}
+      />
             </Grid>
           </Grid>
           <Grid container className="headercontainer">
@@ -97,5 +90,5 @@ class QuestionForm extends Component {
 
 export default reduxForm({
   form: "QuestionForm",
-  // validate:QuestionFormValidation,
+  validate:PostQuestionValidation,
 })(QuestionForm);

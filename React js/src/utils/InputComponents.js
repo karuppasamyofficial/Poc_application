@@ -20,6 +20,7 @@ export const renderTextField = (formProps) => {
           error={meta.touched && meta.error ? true : false}
           placeholder={formProps.placeholder}
           fullWidth={formProps.fullWidth}
+          
           // fullWidth
           // label={formProps.label}
           name={formProps.name}

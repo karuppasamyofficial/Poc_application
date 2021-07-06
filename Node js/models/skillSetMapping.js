@@ -22,5 +22,6 @@ const SkillSetMapping = sequelize.define(
   }
 );
 Question.hasMany(SkillSetMapping);
+SkillSetMapping.belongsTo(Question);
 SkillSetMapping.sync();
 module.exports = SkillSetMapping;

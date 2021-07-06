@@ -30,7 +30,7 @@ export default class Questions extends Component {
     console.log("submitQuestion", formValues);
 
     const { question_title, question_description, skill_set } = formValues;
-    const { skill_names } = this.state;
+    const { skill_names,skillsOptions } = this.state;
 
     var new_skillSet = [];
     var existing_skillSet = [];
@@ -38,16 +38,20 @@ export default class Questions extends Component {
       if (!skill_names.includes(skill)) {
         new_skillSet.push({ skill_name: skill });
       } else {
-        existing_skillSet.push(skill);
+
+        // var  getSkillId=skillsOptions.filter(()=
+        var getSkillId = skillsOptions.filter(skillOption => skillOption.label==skill );
+console.log("existing skillset",skillsOptions,getSkillId[0].value,skill);
+        existing_skillSet.push(getSkillId[0].value);
       }
     });
-    console.log(
-      "new_skillSet",
-      new_skillSet,
-      question_title,
-      question_description,
-      skill_set
-    );
+    // console.log(
+    //   "new_skillSet",
+    //   new_skillSet,
+    //   question_title,
+    //   question_description,
+    //   skill_set
+    // );
     axiosInstance
       .post("/questions", {
         question_title: question_title,
@@ -64,7 +68,7 @@ export default class Questions extends Component {
   render() {
     return (
       <div>
-         mc am
+     
         <QuestionForm
           submitQuestion={this.submitQuestion}
           skillsOptions={this.state.skillsOptions}

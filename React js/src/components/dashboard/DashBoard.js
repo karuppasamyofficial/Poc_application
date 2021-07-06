@@ -11,12 +11,11 @@ import history from "../../history";
 import UserRegistration from "../user/UserRegistration";
 import { Router, Switch, Route, Link, withRouter } from "react-router-dom";
 import logo from "../../images/logo-stackoverflow.png";
-
+import Grid from "@material-ui/core/Grid";
+import Divider from '@material-ui/core/Divider';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 class DashBoard extends Component {
   render() {
-    console.log("state values", this.state.skillsOption);
-
-    const { showForm, skillsOptions } = this.state;
     return (
       <>
         <div className="topbar">
@@ -26,20 +25,30 @@ class DashBoard extends Component {
           {/* <div className="itemgrow">icon</div> */}
           <div className="itemgrow username">
             {/* <div> */}
-            username
+            <AccountCircleIcon   className="userIcon"/>
+            {sessionStorage.getItem("userInfo")}
             {/* </div> */}
           </div>
         </div>
         <div>
-          <button onClick={() => history.push("/dashboard/askquestions")}>
-            Ask Question
-          </button>
-          <button onClick={() => history.push("/dashboard/questions")}>
-            Questions
-          </button>
-          <QuestionsView></QuestionsView>
-          <Route path="/dashboard/questions" component={QuestionsView} />
-          <Route path="/dashboard/askquestions" component={Questions} />
+          <Grid container>
+            <Grid item md={9}>
+              <div className="contentContainer">
+                <button
+                  className="askQuestnbtn"
+                  onClick={() => history.push("/dashboard/askquestions")}
+                >
+                  Ask Question
+                </button>
+                
+                <Route path="/dashboard/questions" component={QuestionsView} />
+                <Route path="/dashboard/askquestions" component={Questions} />
+              </div>
+            </Grid>
+            <Grid item md={3}  style={{marginTop:"30px"}}>
+              {/* Filter  By Technology */}
+            </Grid>
+          </Grid>
         </div>
       </>
     );
