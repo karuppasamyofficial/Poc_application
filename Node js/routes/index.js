@@ -1,5 +1,6 @@
 var user = require("./user");
 var skill =require("./skill");
 const skillSetMapping=require('../models/skillSetMapping');
+const comment=require('./comment');
 const question=require('./question');
-module.exports = [].concat(user,skill,question);
+module.exports = [].concat(user,skill,question,comment);

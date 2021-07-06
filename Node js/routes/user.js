@@ -4,22 +4,17 @@ const PhoneNumber = require("../models/phone_number.js");
 const Address = require("../models/address.js");
 const Education = require("../models/education.js");
 const sequelize = require("../utils/database");
-
-const { emailvalidationschema, userSchema,phone_novalidationschema } = require("../utils/validation/userSchema");
-
-const Joi = require("joi");
-
+const {
+  emailvalidationschema,
+  userSchema,
+  phone_novalidationschema,
+} = require("../utils/validation/userSchema");
 const getUser = async (request, h) => {
-  console.log("login request---------------", request.payload);
-
-  if(request.payload.phone_no){
-    console.log("phone block");
-
-
+  if (request.payload.phone_no) {
     const { phone_no } = request.payload;
 
     const { error, value } = phone_novalidationschema.validate(request.payload);
-  
+
     if (error) return h.response(JSON.stringify(error.message)).code(422);
 
     try {
@@ -32,20 +27,16 @@ const getUser = async (request, h) => {
           },
         ],
       });
-  console.log("result of userlist",userlist);
-return h.response({ data: userlist }).code(200);
+
+      return h.response({ data: userlist }).code(200);
     } catch (error) {
-      console.log("userlist", error);
       return h.response({ status: "Internal server error" }).code(500);
     }
-  }
-
-  else{
-    console.log("email block");
+  } else {
     const { email_id } = request.payload;
 
-    const { error, value } = emailvalidationschema.validate(request.payload);
-  
+    const { error } = emailvalidationschema.validate(request.payload);
+
     if (error) return h.response(JSON.stringify(error.message)).code(422);
     try {
       const userlist = await User.findAll({
@@ -57,23 +48,16 @@ return h.response({ data: userlist }).code(200);
           },
         ],
       });
-  console.log("result of userlist",userlist);
-return h.response({ data: userlist }).code(200);
+
+      return h.response({ data: userlist }).code(200);
     } catch (error) {
-      console.log("userlist", error);
       return h.response({ status: "Internal server error" }).code(500);
     }
   }
-
-  
 };
 
-
-
 const userRegistration = async (request, h) => {
-  console.log("registerUser", request.payload);
-  const { error, value } = userSchema.validate(request.payload);
-  console.log("eroro in user creation", error);
+  const { error } = userSchema.validate(request.payload);
 
   if (error) return h.response(JSON.stringify(error.message)).code(422);
 
@@ -92,64 +76,62 @@ const userRegistration = async (request, h) => {
   var listofPhoneNo = [];
   var educationDetails = [];
   try {
-
     const result = await sequelize.transaction(async (t) => {
+      const userCreation = await User.create({
+        first_name: first_name,
+        last_name: last_name,
+        dob: dob,
+        gender: gender,
+      });
 
-    const userCreation = await User.create({
-      first_name: first_name,
-      last_name: last_name,
-      dob: dob,
-      gender: gender,
-    });
+      email.map((e, i) => {
+        listofEmails.push({
+          email_id: e.email_id,
+          userId: userCreation.id,
+        });
+      });
+      phone_number.map((e, i) => {
+        listofPhoneNo.push({
+          phone_no: e.phone_no,
+          userId: userCreation.id,
+        });
+      });
+      education.map((e, i) => {
+        educationDetails.push({
+          education_type: e.education_type,
+          institution_name: e.institution_name,
+          university: e.university,
+          userId: userCreation.id,
+        });
+      });
+      address.map((data, i) => {
+        listofAddress.push({
+          address_type: data.address_type,
+          address_line1: data.address_line1,
+          address_line2: data.address_line2,
+          address_line3: data.address_line3,
+          landmark: data.landmark,
+          state: data.state,
+          city: data.city,
+          pincode: data.pincode,
+          userId: userCreation.id,
+        });
+      });
 
-    email.map((e, i) => {
-      listofEmails.push({
-        email_id: e.email_id,
-        userId: userCreation.id,
+      const emailsInfo = await Email.bulkCreate(listofEmails, {
+        transaction: t,
       });
-    });
-    phone_number.map((e, i) => {
-      listofPhoneNo.push({
-        phone_no: e.phone_no,
-        userId: userCreation.id,
+      const phoneNoInfo = await PhoneNumber.bulkCreate(listofPhoneNo, {
+        transaction: t,
       });
-    });
-    education.map((e, i) => {
-      educationDetails.push({
-        education_type: e.education_type,
-        institution_name: e.institution_name,
-        university: e.university,
-        userId: userCreation.id,
+      const educationInfo = await Education.bulkCreate(educationDetails, {
+        transaction: t,
       });
-    });
-    address.map((data, i) => {
-      listofAddress.push({
-        address_type: data.address_type,
-        address_line1: data.address_line1,
-        address_line2: data.address_line2,
-        address_line3: data.address_line3,
-        landmark: data.landmark,
-        state: data.state,
-        city: data.city,
-        pincode: data.pincode,
-        userId: userCreation.id,
+      const addressInfo = await Address.bulkCreate(listofAddress, {
+        transaction: t,
       });
+      return userCreation;
     });
-    console.log("listofEmails", listofEmails);
-    const emailsInfo = await Email.bulkCreate(listofEmails,{
-      transaction: t,
-    });
-    const phoneNoInfo = await PhoneNumber.bulkCreate(listofPhoneNo,{
-      transaction: t,
-    });
-    const educationInfo = await Education.bulkCreate(educationDetails,{
-      transaction: t,
-    });
-    const addressInfo = await Address.bulkCreate(listofAddress,{
-      transaction: t,
-    });
-    return userCreation
-  })
     return h.response(result).code(201);
   } catch (error) {
     return h.response({ status: "Internal server error" }).code(500);
@@ -157,6 +139,6 @@ const userRegistration = async (request, h) => {
 };
 
 module.exports = [
-  { method: "POST", path: "/login",handler: getUser },
+  { method: "POST", path: "/login", handler: getUser },
   { method: "POST", path: "/users", handler: userRegistration },
 ];

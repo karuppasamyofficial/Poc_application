@@ -11,7 +11,7 @@ const PostQuestionValidation = (values) => {
   if (!values.skill_set || !values.skill_set.length) {
     errors.skill_set = "Please select atleast one technology";
   }
-console.log("redux form valiadtion",errors);
+
   return errors;
 };
 

@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const sequelize = require("../utils/database");
 
 const User = require("../models/user");
@@ -24,17 +24,12 @@ const Education = sequelize.define(
       type: Sequelize.STRING,
       allowNull: true,
     },
-   
-   
   },
   {
     timestamps: false,
   }
 );
 User.hasMany(Education);
-Education.sync()
-
-
-
+Education.sync();
 
 module.exports = Education;

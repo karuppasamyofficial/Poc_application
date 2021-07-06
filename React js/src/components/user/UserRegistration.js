@@ -32,7 +32,6 @@ const renderPhoneNumbers = ({
         <Grid item md={6} className="itemContainer">
           <Field
             name={`${inputField}.phone_no`}
-            // type="text"
             component={renderTextField}
             label="Phone Number"
             placeholder="Phone Number"
@@ -78,7 +77,6 @@ const renderEducation = ({
         <Grid item md={3} className="itemContainer">
           <Field
             name={`${inputField}.education_type`}
-            // type="text"
             component={renderTextField}
             placeholder="Education Type"
           />
@@ -86,7 +84,6 @@ const renderEducation = ({
         <Grid item md={3} className="itemContainer">
           <Field
             name={`${inputField}.institution_name`}
-            // type="text"
             component={renderTextField}
             placeholder="Institution Name"
           />
@@ -94,7 +91,6 @@ const renderEducation = ({
         <Grid item md={3} className="itemContainer">
           <Field
             name={`${inputField}.university`}
-            // type="text"
             component={renderTextField}
             placeholder="University Name"
           />
@@ -135,9 +131,7 @@ const renderEmails = ({ fields, meta: { touched, error, submitFailed } }) => (
         <Grid item md={6} className="itemContainer">
           <Field
             name={`${inputField}.email_id`}
-           
             component={renderTextField}
-          
             placeholder="Email Id"
             type="email"
           />
@@ -175,11 +169,9 @@ const renderRadioGroup = ({ meta, input, ...rest }) => (
   </>
 );
 class UserRegistration extends Component {
-
-
-  state={
+  state = {
     errorMessage: null,
-  }
+  };
   onSubmitUserForm = (formvalues) => {
     console.log("onSubmitUserForm", formvalues);
 
@@ -208,49 +200,41 @@ class UserRegistration extends Component {
     } = formvalues;
     axiosInstance
       .post("/users", {
-        
+        first_name: first_name,
+        last_name,
+        last_name,
+        dob: dob,
+        gender: gender,
+        address: [
+          {
+            address_type: "office",
+            address_line1: ResidentialAddtessLine1,
+            address_line2: ResidentialAddtessLine2,
+            address_line3: ResidentialAddtessLine3,
+            landmark: ResidentialLandmark,
+            state: ResidentialState,
+            city: ResidentialCity,
+            pincode: Residentialpincode,
+          },
 
-
-        first_name:first_name,
-        last_name,last_name,
-        dob:dob,
-        gender:gender,
-        address:[{
-
-
-          "address_type":"office",
-          "address_line1":ResidentialAddtessLine1,
-          "address_line2":ResidentialAddtessLine2,
-          "address_line3":ResidentialAddtessLine3,
-          "landmark":ResidentialLandmark,
-          "state":ResidentialState,
-          "city":ResidentialCity,
-          "pincode":Residentialpincode
-        },
-      
-      
-        {
-
-
-          "address_type":"Residential",
-          "address_line1":OfficeAddtessLine1,
-          "address_line2":OfficeAddtessLine2,
-          "address_line3":OfficeAddtessLine3,
-          "landmark":OfficeLandmark,
-          "state":OfficeState,
-          "city":OfficeCity,
-          "pincode":Officepincode
-        }],
-        email:email,phone_number:phone_number,education:education
-
-
-
-
+          {
+            address_type: "Residential",
+            address_line1: OfficeAddtessLine1,
+            address_line2: OfficeAddtessLine2,
+            address_line3: OfficeAddtessLine3,
+            landmark: OfficeLandmark,
+            state: OfficeState,
+            city: OfficeCity,
+            pincode: Officepincode,
+          },
+        ],
+        email: email,
+        phone_number: phone_number,
+        education: education,
       })
       .then(function (response) {
         console.log("response", response.data);
-        history.push('./Dashboard');
-      
+        history.push("/");
       })
       .catch((err) => {
         console.log("login error", err);
@@ -288,7 +272,7 @@ class UserRegistration extends Component {
                 <Field
                   name="last_name"
                   component={renderTextField}
-                  placeholder="First Name"
+                  placeholder="Last Name"
                   label="Last Name"
                 />
               </Grid>
@@ -443,20 +427,17 @@ class UserRegistration extends Component {
             <div className="registrationHeader">Add Education Details</div>
             <FieldArray name="education" component={renderEducation} />
             {this.state.alert == true ? (
-            <Alert variant="filled" severity="error">
-              {this.state.errorMessage}
-            </Alert>
-          ) : null}
+              <Alert variant="filled" severity="error">
+                {this.state.errorMessage}
+              </Alert>
+            ) : null}
             <Grid container>
-
-              <Grid  item  style={{marginBottom:"20px"}} >
-              <button type="submit" className="loginbtn">
-                Login
-              </button> 
-                </Grid>
-              
+              <Grid item style={{ marginBottom: "20px" }}>
+                <button type="submit" className="loginbtn">
+                  Login
+                </button>
+              </Grid>
             </Grid>
-            {/* </div> */}
           </form>
         </div>
       </div>

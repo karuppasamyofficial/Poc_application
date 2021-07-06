@@ -150,6 +150,7 @@ code {
 .contentContainer{
 
   margin-left: 12px;
+  position: relative;
 }
 .logo{
 

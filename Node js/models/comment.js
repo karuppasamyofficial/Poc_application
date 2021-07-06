@@ -1,9 +1,9 @@
 const { Sequelize } = require("sequelize");
 const sequelize = require("../utils/database");
 
-const User = require("./user");
-const PhoneNumber = sequelize.define(
-  "phone_number",
+const Question = require("./question");
+const Comment = sequelize.define(
+  "comment",
   {
     id: {
       type: Sequelize.INTEGER,
@@ -12,7 +12,11 @@ const PhoneNumber = sequelize.define(
       allowNull: false,
     },
 
-    phone_no: {
+    answer: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    user_name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -21,7 +25,7 @@ const PhoneNumber = sequelize.define(
     timestamps: false,
   }
 );
-User.hasMany(PhoneNumber);
-PhoneNumber.sync();
+Question.hasMany(Comment);
+Comment.sync();
 
-module.exports = PhoneNumber;
+module.exports = Comment;

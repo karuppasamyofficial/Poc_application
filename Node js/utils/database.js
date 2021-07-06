@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+
 const sequelize = new Sequelize("stack_overflow", "root", "karuppasamy", {
   define: {
     freezeTableName: true,

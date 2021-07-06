@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import QuestionForm from "./QuestionForm";
 import axiosInstance from "../../axios";
 
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import history from "../../history";
 export default class Questions extends Component {
   state = {
     skillsOptions: [],
     skill_names: [],
-    showForm: false,
+  
+    open: false,
   };
   componentDidMount() {
     axiosInstance
@@ -27,10 +31,8 @@ export default class Questions extends Component {
       .catch((err) => {});
   }
   submitQuestion = (formValues) => {
-    console.log("submitQuestion", formValues);
-
-    const { question_title, question_description, skill_set } = formValues;
-    const { skill_names,skillsOptions } = this.state;
+    const { question_title, question_description } = formValues;
+    const { skill_names, skillsOptions } = this.state;
 
     var new_skillSet = [];
     var existing_skillSet = [];
@@ -38,41 +40,52 @@ export default class Questions extends Component {
       if (!skill_names.includes(skill)) {
         new_skillSet.push({ skill_name: skill });
       } else {
+        var getSkillId = skillsOptions.filter(
+          (skillOption) => skillOption.label == skill
+        );
 
-        // var  getSkillId=skillsOptions.filter(()=
-        var getSkillId = skillsOptions.filter(skillOption => skillOption.label==skill );
-console.log("existing skillset",skillsOptions,getSkillId[0].value,skill);
         existing_skillSet.push(getSkillId[0].value);
       }
     });
-    // console.log(
-    //   "new_skillSet",
-    //   new_skillSet,
-    //   question_title,
-    //   question_description,
-    //   skill_set
-    // );
+
     axiosInstance
       .post("/questions", {
         question_title: question_title,
         question_description: question_description,
         skill_set: existing_skillSet,
-
+        user_name: sessionStorage.getItem("userInfo"),
         new_skills: new_skillSet,
       })
       .then((response) => {
-        console.log("question post sucessfully", response.data);
+        this.setState({ open: true });
       })
       .catch((err) => {});
+  };
+
+  handleAlertClose = () => {
+    this.setState({ open: false });
+    history.push("/dashboard/questions");
   };
   render() {
     return (
       <div>
-     
         <QuestionForm
           submitQuestion={this.submitQuestion}
           skillsOptions={this.state.skillsOptions}
         ></QuestionForm>
+        <Snackbar
+          open={this.state.open}
+          autoHideDuration={2000}
+          onClose={this.handleAlertClose}
+        >
+          <Alert
+            onClose={this.handleAlertClose}
+            variant="filled"
+            severity="success"
+          >
+            sucessfully posted your question
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

@@ -1,13 +1,10 @@
 const skill = require("..//models/skill");
 const sequelize = require("../utils/database");
 
-
 const createSkill = async (request, h) => {
-try {
+  try {
     const result = await sequelize.transaction(async (t) => {
-
-      
-      var skillCreation = await skill.create(request.payload,{
+      var skillCreation = await skill.create(request.payload, {
         transaction: t,
       });
       return skillCreation;
@@ -18,16 +15,13 @@ try {
   }
 };
 
-const getSkills=async (request, h)=>{
+const getSkills = async (request, h) => {
+  const skillList = await skill.findAll({});
 
-  const skillList = await skill.findAll({
-    
-  });
+  return h.response(skillList).code(200);
+};
 
-  console.log("skill list",skillList);
-
-  return h.response(skillList).code(200)
-}
-
-module.exports = [{ method: "POST", path: "/skills", handler: createSkill },
-{ method: "GET", path: "/skills", handler:getSkills  }];
+module.exports = [
+  { method: "POST", path: "/skills", handler: createSkill },
+  { method: "GET", path: "/skills", handler: getSkills },
+];

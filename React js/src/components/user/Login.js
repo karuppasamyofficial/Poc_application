@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import logo from "../images/logo-stackoverflow.png";
-import axiosInstance from "../axios";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import logo from "../../images/logo-stackoverflow.png";
+import axiosInstance from "../../axios";
+import { Link } from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
-import history from "../history";
+import history from "../../history";
 
 class Login extends Component {
   state = {
@@ -29,20 +22,17 @@ class Login extends Component {
     axiosInstance
       .post("/login", payload)
       .then((response) => {
-        console.log("response", response.data.data[0].first_name);
-        console.log("username is incorrect", response.data.data.length);
         if (response.data.data.length === 0) {
           this.setState({
             alert: true,
             errorMessage: "Username is incorrect",
           });
         } else {
-          sessionStorage.setItem("userInfo",response.data.data[0].first_name)
+          sessionStorage.setItem("userInfo", response.data.data[0].first_name);
           history.push("/dashboard/questions");
         }
       })
       .catch((err) => {
-        console.log("login error", err);
         this.setState({ alert: true, errorMessage: "something went wrong" });
       });
   };
@@ -61,7 +51,6 @@ class Login extends Component {
             alert: true,
             errorMessage: "Please enter a valida email id",
           });
-          console.log("email block");
         } else {
           payload = {
             email_id: this.state.email_id,
@@ -69,7 +58,6 @@ class Login extends Component {
           this.submitLogin(payload);
         }
       } else {
-        console.log("phone number");
         payload = {
           phone_no: this.state.phone_no,
         };

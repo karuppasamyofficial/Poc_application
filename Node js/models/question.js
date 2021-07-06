@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");;
 const sequelize = require("../utils/database");
 
 const User = require("../models/user");
@@ -23,7 +23,11 @@ const Question = sequelize.define(
       allowNull: false,
     },
     
-   
+
+    user_name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     
    
   },
@@ -32,5 +36,5 @@ const Question = sequelize.define(
 
   }
 );
-Question.sync({alter:true});
+Question.sync();
 module.exports = Question;
