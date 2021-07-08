@@ -24,10 +24,10 @@ const Question = sequelize.define(
     },
     
 
-    user_name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
+    // user_name: {
+    //   type: Sequelize.STRING,
+    //   allowNull: false,
+    // },
     
    
   },
@@ -36,5 +36,6 @@ const Question = sequelize.define(
 
   }
 );
-Question.sync();
+Question.belongsTo(User,{foreignKey: 'user_id'})
+Question.sync({alter:true});
 module.exports = Question;

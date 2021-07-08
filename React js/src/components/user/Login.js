@@ -12,23 +12,25 @@ class Login extends Component {
     phone_no: "",
     alert: false,
     errorMessage: null,
+    password:""
   };
 
-  handleChange = (e) => {
-    this.setState({ [e.currentTarget.id]: e.currentTarget.value });
-  };
+ 
 
   submitLogin = (payload) => {
     axiosInstance
       .post("/login", payload)
       .then((response) => {
-        if (response.data.data.length === 0) {
+        if (response.data.status ==="failure") {
           this.setState({
             alert: true,
-            errorMessage: "Username is incorrect",
+            errorMessage: "Username and password is incorrect",
           });
         } else {
           sessionStorage.setItem("userInfo", response.data.data[0].first_name);
+          sessionStorage.setItem("token", response.data.accessToken);
+
+
           history.push("/dashboard/questions");
         }
       })
@@ -39,9 +41,10 @@ class Login extends Component {
 
   onClickLogin = (e) => {
     e.preventDefault();
-    if (this.state.email_id != "" || this.state.phone_no != "") {
+    if (this.state.email_id != "" && this.state.password!="" || this.state.phone_no != ""  && this.state.password!="") {
       var payload;
       if (this.state.email_id) {
+        console.log("email with password");
         if (
           !new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(
             this.state.email_id
@@ -54,19 +57,23 @@ class Login extends Component {
         } else {
           payload = {
             email_id: this.state.email_id,
+            password:this.state.password
           };
           this.submitLogin(payload);
         }
       } else {
+
+        console.log("phone number block");
         payload = {
           phone_no: this.state.phone_no,
+          password:this.state.password
         };
         this.submitLogin(payload);
       }
     } else {
       this.setState({
         alert: true,
-        errorMessage: "Please enter email Id or phone number",
+        errorMessage: "Please enter user name and password",
       });
     }
   };
@@ -77,12 +84,16 @@ class Login extends Component {
           <div>
             <img className="logo" src={logo} />
           </div>
-
+          <div className="mbot-5">
+          <label>User Name</label>
+                </div>
+          
           <div>
             <TextField
               value={this.state.email_id}
               fullWidth
-              label="Email *"
+            
+              placeholder="Email *"
               type="email"
               variant="outlined"
               onChange={(event) => {
@@ -95,11 +106,29 @@ class Login extends Component {
             <TextField
               value={this.state.phone_no}
               fullWidth
-              label="Phone Number *"
+            
+              placeholder="Phone Number *"
               variant="outlined"
               inputProps={{ maxLength: 10 }}
               onChange={(event) => {
                 this.setState({ phone_no: event.target.value });
+              }}
+            />
+          </div>
+          <div className="mbot-5 mar-top7px">
+          <label>Password:</label>
+                </div>
+         
+          <div>
+            <TextField
+              value={this.state.password}
+              fullWidth
+             
+              placeholder="Password *"
+              variant="outlined"
+              type="password"
+              onChange={(event) => {
+                this.setState({ password: event.target.value });
               }}
             />
           </div>

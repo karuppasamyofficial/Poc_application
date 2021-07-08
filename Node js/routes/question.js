@@ -11,7 +11,7 @@ const createQuestion = async (request, h) => {
     new_skills,
     user_name,
   } = request.payload;
-
+console.log("console.log",request.user_id);
   var skillList = [];
   try {
     const result = await sequelize.transaction(async (t) => {
@@ -26,14 +26,16 @@ const createQuestion = async (request, h) => {
         });
       }
       var allSkillIds = [...skill_set, ...newSkillIds];
+      var user_id=request.user_id;
       var questionCreation = await Question.create({
         question_title,
         question_description,
-        user_name,
+        
+        user_id
       });
       allSkillIds.map(
         (id, index) => {
-          skillList.push({ skill_id: id, questionId: questionCreation.id });
+          skillList.push({ skill_id: id, question_id: questionCreation.id });
         },
         { transaction: t }
       );
@@ -62,6 +64,7 @@ const getQuestions = async (request, h) => {
       order: sequelize.literal("count DESC"),
       raw: true,
     });
+    console.log("treding skill set--------------",trendingSkill);
 
     const questionList = await Question.findAll({
       include: [
@@ -77,6 +80,6 @@ const getQuestions = async (request, h) => {
 };
 
 module.exports = [
-  { method: "POST", path: "/questions", handler: createQuestion },
-  { method: "GET", path: "/questions", handler: getQuestions },
+  { method: "POST", path: "/questions",config: { auth: "jwt" }, handler: createQuestion },
+  { method: "GET", path: "/questions",config: { auth: "jwt" }, handler: getQuestions },
 ];

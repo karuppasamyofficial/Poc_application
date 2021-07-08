@@ -6,8 +6,7 @@ import { Route } from "react-router-dom";
 import logo from "../../images/logo-stackoverflow.png";
 import Grid from "@material-ui/core/Grid";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-
-import Comments from "../comments/Comments";
+import Answers from "../answer/Answers";
 class DashBoard extends Component {
   render() {
     return (
@@ -41,11 +40,11 @@ class DashBoard extends Component {
                   />
                   <Route path="/dashboard/askquestions" component={Questions} />
 
-                  <Route exact path="/dashboard/comments">
-                    <Comments />
+                  <Route exact path="/dashboard/answers">
+                    <Answers />
                   </Route>
-                  <Route path={`/dashboard/comments/:id`}>
-                    <Comments />
+                  <Route path={`/dashboard/answers/:id`}>
+                    <Answers />
                   </Route>
                 </div>
               </div>

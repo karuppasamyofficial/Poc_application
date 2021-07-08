@@ -2,10 +2,12 @@ const Joi = require("joi");
 
 const emailvalidationschema = Joi.object({
   email_id: Joi.string().email().required(),
+  password:Joi.string().required(),
 });
 
 const phone_novalidationschema = Joi.object({
   phone_no: Joi.string().max(10).required(),
+  password:Joi.string().required(),
 });
 
 const emailSchema = Joi.object({
@@ -16,6 +18,7 @@ const userSchema = Joi.object({
   last_name: Joi.string().required(),
   dob: Joi.date().required(),
   gender: Joi.string().required(),
+  password:Joi.string().required(),
   email: Joi.array()
     .items({
       email_id: Joi.string().email().required(),

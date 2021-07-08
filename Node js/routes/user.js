@@ -4,56 +4,94 @@ const PhoneNumber = require("../models/phone_number.js");
 const Address = require("../models/address.js");
 const Education = require("../models/education.js");
 const sequelize = require("../utils/database");
+const Jwt = require("jsonwebtoken");
+var CryptoJS = require("crypto-js");
+
+require("dotenv").config();
 const {
   emailvalidationschema,
   userSchema,
   phone_novalidationschema,
 } = require("../utils/validation/userSchema");
 const getUser = async (request, h) => {
+  const { phone_no, password, email_id } = request.payload;
   if (request.payload.phone_no) {
-    const { phone_no } = request.payload;
-
-    const { error, value } = phone_novalidationschema.validate(request.payload);
+    const { error } = phone_novalidationschema.validate(request.payload);
 
     if (error) return h.response(JSON.stringify(error.message)).code(422);
 
     try {
-      const userlist = await User.findAll({
+      const user = await User.findAll({
         include: [
           {
             model: PhoneNumber,
-            attributes: ["id", "phone_no", "userId"],
+            attributes: ["id", "phone_no", "user_id"],
             where: { phone_no: phone_no },
           },
         ],
       });
 
-      return h.response({ data: userlist }).code(200);
+      var userValid = verifyCredentails(user, password);
+      if (userValid) {
+        var accessToken = createToken({user_id:user[0].id});
+
+        return h
+          .response({ data: user, accessToken: accessToken, status: "success" })
+          .code(200);
+      } else {
+        return h.response({ data: user, status: "failure" }).code(200);
+      }
     } catch (error) {
       return h.response({ status: "Internal server error" }).code(500);
     }
   } else {
-    const { email_id } = request.payload;
-
     const { error } = emailvalidationschema.validate(request.payload);
 
     if (error) return h.response(JSON.stringify(error.message)).code(422);
     try {
-      const userlist = await User.findAll({
+      const user = await User.findAll({
         include: [
           {
             model: Email,
-            attributes: ["id", "email_id", "userId"],
+            attributes: ["id", "email_id", "user_id"],
             where: { email_id: email_id },
           },
         ],
       });
 
-      return h.response({ data: userlist }).code(200);
+      var userValid = verifyCredentails(user, password);
+      if (userValid) {
+        var accessToken = createToken({user_id:user[0].id});
+
+        return h
+          .response({ data: user, accessToken: accessToken, status: "success" })
+          .code(200);
+      } else {
+        return h.response({ data: user, status: "failure" }).code(200);
+      }
     } catch (error) {
-      return h.response({ status: "Internal server error" }).code(500);
+      return h.response({ status: error }).code(500);
     }
   }
+};
+
+verifyCredentails = (user, password) => {
+  if (user.length !== 0) {
+    var passwordBytes = CryptoJS.AES.decrypt(
+      user[0].password,
+      process.env.CRYPTO_SECRETKEY
+    );
+    var decryptPassword = passwordBytes.toString(CryptoJS.enc.Utf8);
+
+    return decryptPassword !== password ? false : true;
+  } else {
+    return false;
+  }
+};
+createToken = (payload) => {
+  console.log("create token",payload);
+  var accessToken = Jwt.sign(payload, process.env.ACCESS_TOKEN_SECRETKEY,{ algorithm: 'HS256'});
+  return accessToken;
 };
 
 const userRegistration = async (request, h) => {
@@ -66,6 +104,7 @@ const userRegistration = async (request, h) => {
     last_name,
     dob,
     gender,
+    password,
     email,
     address,
     phone_number,
@@ -75,6 +114,10 @@ const userRegistration = async (request, h) => {
   var listofAddress = [];
   var listofPhoneNo = [];
   var educationDetails = [];
+  var encryptPassword = CryptoJS.AES.encrypt(
+    password,
+    process.env.CRYPTO_SECRETKEY
+  ).toString();
   try {
     const result = await sequelize.transaction(async (t) => {
       const userCreation = await User.create({
@@ -82,18 +125,19 @@ const userRegistration = async (request, h) => {
         last_name: last_name,
         dob: dob,
         gender: gender,
+        password: encryptPassword,
       });
 
       email.map((e, i) => {
         listofEmails.push({
           email_id: e.email_id,
-          userId: userCreation.id,
+          user_id: userCreation.id,
         });
       });
       phone_number.map((e, i) => {
         listofPhoneNo.push({
           phone_no: e.phone_no,
-          userId: userCreation.id,
+          user_id: userCreation.id,
         });
       });
       education.map((e, i) => {
@@ -101,7 +145,7 @@ const userRegistration = async (request, h) => {
           education_type: e.education_type,
           institution_name: e.institution_name,
           university: e.university,
-          userId: userCreation.id,
+          user_id: userCreation.id,
         });
       });
       address.map((data, i) => {
@@ -114,7 +158,7 @@ const userRegistration = async (request, h) => {
           state: data.state,
           city: data.city,
           pincode: data.pincode,
-          userId: userCreation.id,
+          user_id: userCreation.id,
         });
       });
 
@@ -139,6 +183,27 @@ const userRegistration = async (request, h) => {
 };
 
 module.exports = [
-  { method: "POST", path: "/login", handler: getUser },
-  { method: "POST", path: "/users", handler: userRegistration },
+  {
+    method: "POST",
+    path: "/login",
+    handler: getUser,
+    config: {
+      auth: false,
+    },
+  },
+  {
+    method: "POST",
+    path: "/users",
+    handler: userRegistration,
+    config: {
+      auth: false,
+    },
+  },
+  // {
+  //   method: "GET",
+  //   path: "/test",
+  //   config: { auth: "jwt" },
+
+  //   handler: getpost,
+  // },
 ];

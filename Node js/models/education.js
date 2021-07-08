@@ -29,7 +29,8 @@ const Education = sequelize.define(
     timestamps: false,
   }
 );
-User.hasMany(Education);
+User.hasMany(Education,{foreignKey: 'user_id'});
 Education.sync();
 
 module.exports = Education;
+

@@ -12,7 +12,10 @@ export default class QuestionsView extends Component {
   };
   componentDidMount() {
     axiosInstance
-      .get("/questions")
+      .get("/questions",{
+        headers: {
+          authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }})
       .then((response) => {
         this.setState({
           questions: response.data,
@@ -32,7 +35,7 @@ export default class QuestionsView extends Component {
                 <ListItem
                   button
                   component={Link}
-                  to={`/dashboard/comments/${question.id}`}
+                  to={`/dashboard/answers/${question.id}`}
                 >
                   <ListItemText
                     primary={question.question_title}

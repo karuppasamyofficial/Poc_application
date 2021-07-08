@@ -53,9 +53,12 @@ export default class Questions extends Component {
         question_title: question_title,
         question_description: question_description,
         skill_set: existing_skillSet,
-        user_name: sessionStorage.getItem("userInfo"),
+        // user_name: sessionStorage.getItem("userInfo"),
         new_skills: new_skillSet,
-      })
+      },{headers:{
+        authorization: `Bearer ${sessionStorage.getItem("token")}`
+      }},
+      )
       .then((response) => {
         this.setState({ open: true });
       })

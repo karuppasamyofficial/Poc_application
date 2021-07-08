@@ -22,6 +22,10 @@ const getSkills = async (request, h) => {
 };
 
 module.exports = [
-  { method: "POST", path: "/skills", handler: createSkill },
-  { method: "GET", path: "/skills", handler: getSkills },
+  { method: "POST", path: "/skills",config: {
+    auth: false,
+  }, handler: createSkill },
+  { method: "GET", path: "/skills",config: {
+    auth: false,
+  }, handler: getSkills },
 ];

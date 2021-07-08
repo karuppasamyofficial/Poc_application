@@ -1,20 +1,18 @@
 const Question = require("..//models/question");
 const sequelize = require("../utils/database");
-const Comment = require("..//models/comment");
-
-const addComment = async (request, h) => {
-
-  var payload={
+const Answer = require("..//models/answer");
+const addAnswer = async (request, h) => {
+var payload={
     answer:request.payload.answer,
     user_id:request.user_id,
     question_id:request.payload.question_id
   }
   try {
     const result = await sequelize.transaction(async (t) => {
-      var commentCreation = await Comment.create(payload, {
+      var answerCreation = await Answer.create(payload, {
         transaction: t,
       });
-      return commentCreation;
+      return answerCreation;
     });
 
     return h.response(result).code(201);
@@ -23,14 +21,14 @@ const addComment = async (request, h) => {
   }
 };
 
-const getComments = async (request, h) => {
+const getAnswers = async (request, h) => {
   var question_id = request.params.question_id;
 
   const comments = await Question.findAll({
     where: { id: question_id },
     include: [
       {
-        model: Comment,
+        model: Answer,
       },
     ],
   });
@@ -39,6 +37,6 @@ const getComments = async (request, h) => {
 };
 
 module.exports = [
-  { method: "POST", path: "/comments",config: { auth: "jwt" }, handler: addComment },
-  { method: "GET", path: "/comments/{question_id}",config: { auth: "jwt" }, handler: getComments },
+  { method: "POST", path: "/answers",config: { auth: "jwt" }, handler: addAnswer },
+  { method: "GET", path: "/answers/{question_id}",config: { auth: "jwt" }, handler: getAnswers },
 ];

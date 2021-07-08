@@ -20,6 +20,8 @@ const Email = sequelize.define(
     timestamps: false,
   }
 );
-User.hasMany(Email);
+User.hasMany(Email,{foreignKey: 'user_id'});
+
 Email.sync();
 module.exports = Email;
+

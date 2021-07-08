@@ -21,7 +21,7 @@ const SkillSetMapping = sequelize.define(
     timestamps: false,
   }
 );
-Question.hasMany(SkillSetMapping);
-SkillSetMapping.belongsTo(Question);
+Question.hasMany(SkillSetMapping,{foreignKey: 'question_id'});
+SkillSetMapping.belongsTo(Question,{foreignKey: 'question_id'});
 SkillSetMapping.sync();
 module.exports = SkillSetMapping;

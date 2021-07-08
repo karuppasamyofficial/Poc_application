@@ -1,9 +1,10 @@
 const { Sequelize } = require("sequelize");
 const sequelize = require("../utils/database");
 
+const Question = require("./question");
 const User = require("./user");
-const PhoneNumber = sequelize.define(
-  "phone_number",
+const Answer = sequelize.define(
+  "answer",
   {
     id: {
       type: Sequelize.INTEGER,
@@ -12,16 +13,21 @@ const PhoneNumber = sequelize.define(
       allowNull: false,
     },
 
-    phone_no: {
+    answer: {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    // user_name: {
+    //   type: Sequelize.STRING,
+    //   allowNull: false,
+    // },
   },
   {
     timestamps: false,
   }
 );
-User.hasMany(PhoneNumber,{foreignKey: 'user_id'});
-PhoneNumber.sync();
+Question.hasMany(Answer,{foreignKey: 'question_id'});
+Answer.belongsTo(User,{foreignKey: 'user_id'})
+Answer.sync();
 
-module.exports = PhoneNumber;
+module.exports = Answer;
