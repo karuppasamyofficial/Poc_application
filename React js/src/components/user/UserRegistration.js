@@ -197,6 +197,7 @@ class UserRegistration extends Component {
       email,
       phone_number,
       education,
+      password
     } = formvalues;
     axiosInstance
       .post("/users", {
@@ -205,6 +206,7 @@ class UserRegistration extends Component {
         last_name,
         dob: dob,
         gender: gender,
+        password,
         address: [
           {
             address_type: "office",
@@ -254,7 +256,7 @@ class UserRegistration extends Component {
             <Grid container className="headercontainer">
               <Grid item md={3}>
                 <div className="mbot-5">
-                  <label>First Name:</label>
+                  <label>First Name</label>
                 </div>
 
                 <Field
@@ -266,7 +268,7 @@ class UserRegistration extends Component {
               </Grid>
               <Grid item md={3}>
                 <div className="mbot-5">
-                  <label>Last Name:</label>
+                  <label>Last Name</label>
                 </div>
 
                 <Field
@@ -276,16 +278,17 @@ class UserRegistration extends Component {
                   label="Last Name"
                 />
               </Grid>
+
               <Grid item md={3}>
                 <div className="mbot-5">
-                  <label>DOB:</label>
+                  <label>DOB</label>
                 </div>
                 <Field name="dob" component={renderDateField} />
               </Grid>
               <Grid item md={3}>
                 <Field name="gender" component={renderRadioGroup}>
                   <div className="mbot-5">
-                    <label>Gender:</label>
+                    <label>Gender</label>
                   </div>
 
                   <FormControlLabel
@@ -299,6 +302,19 @@ class UserRegistration extends Component {
                     label="Male"
                   />
                 </Field>
+              </Grid>
+              <Grid item md={3}>
+                <div className="mbot-5">
+                  <label>Password</label>
+                </div>
+
+                <Field
+                  name="password"
+                  component={renderTextField}
+                  placeholder="Password"
+                  label="Password"
+                  type="password"
+                />
               </Grid>
             </Grid>
             <div className="registrationHeader">Add Phone Numbers</div>

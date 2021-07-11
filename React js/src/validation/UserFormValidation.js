@@ -7,6 +7,9 @@ const UserFormValidation = (values) => {
   if (!values.last_name) {
     errors.last_name = "Required";
   }
+  if (!values.password) {
+    errors.password = "Required";
+  }
   if (!values.phone_number || !values.phone_number.length) {
     errors.phone_number = {
       _error: "At least one phone number must be entered",

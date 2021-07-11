@@ -2,6 +2,7 @@ const { Sequelize } = require("sequelize");
 const sequelize = require("../utils/database");
 
 const Question = require("./question");
+const Answer = require("./answer");
 const User = require("./user");
 const Comment = sequelize.define(
   "comment",
@@ -13,7 +14,7 @@ const Comment = sequelize.define(
       allowNull: false,
     },
 
-    answer: {
+    message: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -22,12 +23,12 @@ const Comment = sequelize.define(
     //   allowNull: false,
     // },
   },
-  {
-    timestamps: false,
-  }
+ 
 );
-Question.hasMany(Comment,{foreignKey: 'question_id'});
-Comment.belongsTo(User,{foreignKey: 'user_id'})
+Answer.hasMany(Comment,{foreignKey: {name:"answer_id"}});
+Comment.belongsTo(User,{foreignKey: {name:"user_id"}})
+Comment.belongsTo(Question,{foreignKey: {name:"question_id"}})
+
 Comment.sync();
 
 module.exports = Comment;

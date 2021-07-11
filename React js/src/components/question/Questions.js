@@ -71,7 +71,7 @@ export default class Questions extends Component {
   };
   render() {
     return (
-      <div>
+      <div  style={{marginTop:"33px"}}>
         <QuestionForm
           submitQuestion={this.submitQuestion}
           skillsOptions={this.state.skillsOptions}

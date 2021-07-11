@@ -14,25 +14,41 @@ code {
     monospace;
 }
 
+.homeIcon{
+    color: #2196F3;
+     display: flex;
+    justify-content: flex-start;
+    align-items: center;
+ 
+}
 
+.askbtnWrapper{
+
+  display: flex;
+  justify-content: flex-end;
+}
 .itemgrow{
 
-  flex: 4;
+  flex: 3;
+}
+.itemgrow4{
+  flex: 4; 
 }
 .topbar{
   display: flex;
   height: 58px;
- 
-  justify-content: center;
+ justify-content: center;
   align-items: center;
   border-top: 4px solid #f48024;
-
   shadow: 2px 2px 0px #888888;
   box-shadow: 1px #888888;
   box-shadow: 1px #888888;
- 
-  /* z-index: 544px; */
-  box-shadow: 0px 0px 6px 1px #8888
+ /* z-index: 544px; */
+  z-index: 999;
+  box-shadow: 0px 0px 6px 1px #8888;
+  position: sticky;
+  top: 0;
+  background-color: #eff0f1;
 }
 .registrationHeader{
   color: #2196F3;
@@ -68,6 +84,9 @@ code {
 
   margin-bottom: 5px;
 }
+.logout{
+  margin-left: 16px;
+}
 .form {
   max-width: 330px;
   margin: 0 auto;
@@ -100,24 +119,22 @@ code {
     margin-left: 27px;
 }
 .askQuestnbtn{
-    float:right;
-    margin-right: 66px;
-    
-   
-    margin-top: 24px;
-    background-color: #2196F3;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    /* margin: 4px 2px; */
-    cursor: pointer;
-    border-radius: 6px;
+  background-color: #2196F3;
+  border: none;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  /* display: inline-block; */
+  font-size: 16px;
+  /* margin: 4px 2px; */
+  cursor: pointer;
+  border-radius: 6px;
 }
+.commentbton{
 
+  color: #0077cc;
+}
 .questionsHeadr{
   font-size: 31px;
     margin-top: 23px;
@@ -125,6 +142,11 @@ code {
 .userIcon{
   margin-right: 6px;
     margin-top: 3px;
+}
+
+.postAnswerSec{
+
+  background-color: white;
 }
 .username{
 
@@ -149,8 +171,11 @@ code {
 }
 .contentContainer{
 
-  margin-left: 12px;
-  position: relative;
+  /* top:20px;
+  position: relative; */
+  margin-left: 27px;
+
+ 
 }
 
 mar-top7px{

@@ -5,8 +5,9 @@ const Comment = require("..//models/comment");
 const addComment = async (request, h) => {
 
   var payload={
-    answer:request.payload.answer,
+    answer_id:request.payload.answer_id,
     user_id:request.user_id,
+    message:request.payload.message,
     question_id:request.payload.question_id
   }
   try {

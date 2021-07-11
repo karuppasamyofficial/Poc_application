@@ -1,12 +1,13 @@
 const Question = require("..//models/question");
 const sequelize = require("../utils/database");
 const Answer = require("..//models/answer");
+const Comment = require("../models/comment");
 const addAnswer = async (request, h) => {
-var payload={
-    answer:request.payload.answer,
-    user_id:request.user_id,
-    question_id:request.payload.question_id
-  }
+  var payload = {
+    answer: request.payload.answer,
+    user_id: request.user_id,
+    question_id: request.payload.question_id,
+  };
   try {
     const result = await sequelize.transaction(async (t) => {
       var answerCreation = await Answer.create(payload, {
@@ -24,19 +25,48 @@ var payload={
 const getAnswers = async (request, h) => {
   var question_id = request.params.question_id;
 
-  const comments = await Question.findAll({
-    where: { id: question_id },
-    include: [
-      {
-        model: Answer,
-      },
-    ],
-  });
+  // const comments = await Question.findAll({
+  //   where: { id: question_id },
+  //   include: [
+  //     {
+  //       model: Answer,
+  //     },
+  //   ],
+  // });
 
-  return h.response(comments).code(200);
+  // return h.response(comments).code(200);
+  try {
+    const comments = await Question.findAll({
+      where: { id: question_id },
+
+      include: [
+        {
+          model: Answer,
+          include: [
+            {
+              model: Comment,
+            },
+          ],
+        },
+      ],
+    });
+    return h.response(comments).code(200);
+  } catch (error) {
+    console.log("error---------------", error);
+  }
 };
 
 module.exports = [
-  { method: "POST", path: "/answers",config: { auth: "jwt" }, handler: addAnswer },
-  { method: "GET", path: "/answers/{question_id}",config: { auth: "jwt" }, handler: getAnswers },
+  {
+    method: "POST",
+    path: "/answers",
+    config: { auth: "jwt" },
+    handler: addAnswer,
+  },
+  {
+    method: "GET",
+    path: "/answers/{question_id}",
+    config: { auth: "jwt" },
+    handler: getAnswers,
+  },
 ];
