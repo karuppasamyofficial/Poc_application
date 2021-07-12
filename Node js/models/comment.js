@@ -18,17 +18,14 @@ const Comment = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
-    // user_name: {
-    //   type: Sequelize.STRING,
-    //   allowNull: false,
-    // },
+  
   },
  
 );
+
 Answer.hasMany(Comment,{foreignKey: {name:"answer_id"}});
 Comment.belongsTo(User,{foreignKey: {name:"user_id"}})
 Comment.belongsTo(Question,{foreignKey: {name:"question_id"}})
-
-Comment.sync();
+// Comment.sync({force:true});
 
 module.exports = Comment;

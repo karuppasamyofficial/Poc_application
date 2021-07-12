@@ -17,6 +17,14 @@ const Answer = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    up_vote: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    down_vote: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
     // user_name: {
     //   type: Sequelize.STRING,
     //   allowNull: false,
@@ -26,8 +34,10 @@ const Answer = sequelize.define(
     timestamps: false,
   }
 );
-Question.hasMany(Answer,{foreignKey: 'question_id'});
-Answer.belongsTo(User,{foreignKey: 'user_id'})
+
+Question.hasMany(Answer, { foreignKey: "question_id" });
+Answer.belongsTo(User, { foreignKey: "user_id" });
 Answer.sync();
+
 
 module.exports = Answer;

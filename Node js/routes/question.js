@@ -52,6 +52,12 @@ console.log("console.log",request.user_id);
   }
 };
 
+// const  upvoteQuestion=async(request,h)=>{
+
+//   console.log("upvoteQuestion",request.payload);
+// const upvoteQuestion=  await Question.increment('number', { where: { foo: 'bar' })
+// }
+
 const getQuestions = async (request, h) => {
   try {
     const trendingSkill = await SkillSetMapping.findAll({

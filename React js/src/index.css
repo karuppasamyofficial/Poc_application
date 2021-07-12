@@ -21,7 +21,11 @@ code {
     align-items: center;
  
 }
-
+.postAnswerForm{
+  margin-top: 21px;
+  margin-left: 34px;
+  margin-right: 35px;
+}
 .askbtnWrapper{
 
   display: flex;
@@ -143,10 +147,13 @@ code {
   margin-right: 6px;
     margin-top: 3px;
 }
-
+.addComment{
+  color: #0077cc;
+    text-decoration: none;
+}
 .postAnswerSec{
 
-  background-color: white;
+  /* background-color: white; */
 }
 .username{
 
