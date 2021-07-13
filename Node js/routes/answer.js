@@ -2,6 +2,9 @@ const Question = require("..//models/question");
 const sequelize = require("../utils/database");
 const Answer = require("..//models/answer");
 const Comment = require("../models/comment");
+const QuestionVote = require("../models/questionVote");
+const { Sequelize } = require("sequelize");
+
 const addAnswer = async (request, h) => {
   var payload = {
     answer: request.payload.answer,
@@ -25,21 +28,21 @@ const addAnswer = async (request, h) => {
 const getAnswers = async (request, h) => {
   var question_id = request.params.question_id;
 
-  // const comments = await Question.findAll({
-  //   where: { id: question_id },
-  //   include: [
-  //     {
-  //       model: Answer,
-  //     },
-  //   ],
-  // });
-
-  // return h.response(comments).code(200);
   try {
     const comments = await Question.findAll({
       where: { id: question_id },
+      attributes: [
+        "id",
+        "question_title",
+        [sequelize.fn("SUM", sequelize.col("question_vote.up_vote")), "total"],
+      ],
 
       include: [
+        {
+          model: QuestionVote,
+          attributes: [],
+          required: false,
+        },
         {
           model: Answer,
           include: [

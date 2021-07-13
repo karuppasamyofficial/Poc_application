@@ -2,6 +2,8 @@ const Question = require("../models/question");
 const SkillSetMapping = require("../models/skillSetMapping");
 const sequelize = require("../utils/database");
 const skill = require("..//models/skill");
+const QuestionVote = require("..//models/questionVote");
+
 
 const createQuestion = async (request, h) => {
   const {
@@ -11,7 +13,7 @@ const createQuestion = async (request, h) => {
     new_skills,
     user_name,
   } = request.payload;
-console.log("console.log",request.user_id);
+  console.log("console.log", request.user_id);
   var skillList = [];
   try {
     const result = await sequelize.transaction(async (t) => {
@@ -26,12 +28,12 @@ console.log("console.log",request.user_id);
         });
       }
       var allSkillIds = [...skill_set, ...newSkillIds];
-      var user_id=request.user_id;
+      var user_id = request.user_id;
       var questionCreation = await Question.create({
         question_title,
         question_description,
-        
-        user_id
+
+        user_id,
       });
       allSkillIds.map(
         (id, index) => {
@@ -52,11 +54,6 @@ console.log("console.log",request.user_id);
   }
 };
 
-// const  upvoteQuestion=async(request,h)=>{
-
-//   console.log("upvoteQuestion",request.payload);
-// const upvoteQuestion=  await Question.increment('number', { where: { foo: 'bar' })
-// }
 
 const getQuestions = async (request, h) => {
   try {
@@ -70,7 +67,7 @@ const getQuestions = async (request, h) => {
       order: sequelize.literal("count DESC"),
       raw: true,
     });
-    console.log("treding skill set--------------",trendingSkill);
+    console.log("treding skill set--------------", trendingSkill);
 
     const questionList = await Question.findAll({
       include: [
@@ -85,7 +82,22 @@ const getQuestions = async (request, h) => {
   } catch (err) {}
 };
 
+
+
 module.exports = [
-  { method: "POST", path: "/questions",config: { auth: "jwt" }, handler: createQuestion },
-  { method: "GET", path: "/questions",config: { auth: "jwt" }, handler: getQuestions },
+  {
+    method: "POST",
+    path: "/questions",
+    config: { auth: "jwt" },
+    handler: createQuestion,
+  },
+  {
+    method: "GET",
+    path: "/questions",
+    config: { auth: "jwt" },
+    handler: getQuestions,
+  },
+  
+
+ 
 ];

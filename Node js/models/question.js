@@ -25,10 +25,12 @@ const Question = sequelize.define(
     up_vote: {
       type: Sequelize.INTEGER,
       allowNull: true,
+      defaultValue:0
     },
     down_vote: {
       type: Sequelize.INTEGER,
       allowNull: true,
+      defaultValue:0
     },
 
     // user_name: {
@@ -44,5 +46,5 @@ const Question = sequelize.define(
   }
 );
 Question.belongsTo(User,{foreignKey: 'user_id'})
-Question.sync({alter:true});
+Question.sync();
 module.exports = Question;

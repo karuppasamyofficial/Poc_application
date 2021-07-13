@@ -1,6 +1,7 @@
 var user = require("./user");
 var skill =require("./skill");
 const skillSetMapping=require('../models/skillSetMapping');
+const QuestionVote=require('../models/questionVote');
 const comment=require('./comment');
 const answer=require('./answer');
 const question=require('./question');
