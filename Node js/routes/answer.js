@@ -31,20 +31,22 @@ const getAnswers = async (request, h) => {
   try {
     const comments = await Question.findAll({
       where: { id: question_id },
-      attributes: [
-        "id",
-        "question_title",
-        [sequelize.fn("SUM", sequelize.col("question_vote.up_vote")), "total"],
-      ],
 
+      attributes: ["id"],
       include: [
         {
           model: QuestionVote,
-          attributes: [],
-          required: false,
+
+          attributes: [
+            [
+              sequelize.fn("SUM", sequelize.col("question_votes.up_vote")),
+              "total",
+            ],
+          ],
         },
         {
           model: Answer,
+
           include: [
             {
               model: Comment,
@@ -53,6 +55,8 @@ const getAnswers = async (request, h) => {
         },
       ],
     });
+
+   
     return h.response(comments).code(200);
   } catch (error) {
     console.log("error---------------", error);

@@ -1,6 +1,5 @@
 const { Sequelize } = require("sequelize");
 const sequelize = require("../utils/database");
-
 const Question = require("./question");
 const Answer = require("./answer");
 const User = require("./user");

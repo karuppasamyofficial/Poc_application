@@ -17,20 +17,7 @@ const Answer = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
-    up_vote: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-      defaultValue:0
-    },
-    down_vote: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-      defaultValue:0
-    },
-    // user_name: {
-    //   type: Sequelize.STRING,
-    //   allowNull: false,
-    // },
+   
   },
   {
     timestamps: false,
