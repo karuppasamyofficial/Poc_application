@@ -151,6 +151,13 @@ code {
   color: #0077cc;
     text-decoration: none;
 }
+
+.upVote{
+color: blue;
+}
+.marleft{
+  margin-left: 11px;
+}
 .postAnswerSec{
 
   /* background-color: white; */
